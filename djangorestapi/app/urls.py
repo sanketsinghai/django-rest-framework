@@ -4,8 +4,13 @@ from . views import *
 
 urlpatterns = [
     path('', home),
-    path('api/v1/students', index),
-    path('api/v1/students/<id>/', update),
-    path('api/v1/books', bookdata),
-    path('api/v1/catergory', categorydata),
+    path('api/v1/students', StudentAPI.as_view()),
+    path('api/v1/books', BookAPI.as_view()),
+    path('api/v1/category', CategoryAPI.as_view()),
+    
+    #for function based
+    # path('api/v1/students', index),
+    # path('api/v1/students/<id>/', update),
+    # path('api/v1/books', bookdata),
+    # path('api/v1/catergory', categorydata),
 ]
