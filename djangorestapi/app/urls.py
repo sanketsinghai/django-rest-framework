@@ -7,6 +7,7 @@ urlpatterns = [
     path('api/v1/students', StudentAPI.as_view()),
     path('api/v1/books', BookAPI.as_view()),
     path('api/v1/category', CategoryAPI.as_view()),
+    path('api/v1/register', RegisterUserAPI.as_view()),
     
     #for function based
     # path('api/v1/students', index),

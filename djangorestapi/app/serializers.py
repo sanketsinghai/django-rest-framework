@@ -1,6 +1,7 @@
 from django.db import models
 from rest_framework import fields, serializers
 from .models import Book, Category, Student
+from django.contrib.auth.models import User
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,3 +30,14 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = '__all__'
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+    #for making password hashed
+    def create(self, validated_data):
+        user = User.objects.create(username= validated_data['username'])
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
