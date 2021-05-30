@@ -11,7 +11,9 @@ from rest_framework.authtoken.models import Token
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-
+#for jwt
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view()
 def home(request):
@@ -26,12 +28,15 @@ class RegisterUserAPI(APIView):
         serializer.save()
 
         user = User.objects.get(username= serializer.data['username'])
+        refresh = RefreshToken.for_user(user)
+        #for basic token authentication
         token_obj , _ = Token.objects.get_or_create(user= user)
-        return Response({ 'status':200, 'result':serializer.data, 'token':str((token_obj)), 'message':'successfully created users'})         
+        return Response({ 'status':200, 'result':serializer.data,'refresh': str(refresh),
+        'access': str(refresh.access_token), 'message':'successfully created users'})         
 
 
 class StudentAPI(APIView):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -74,7 +79,7 @@ class StudentAPI(APIView):
             return Response({ 'status':403, 'message':'invalid id'})           
 
 class BookAPI(APIView):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -118,7 +123,7 @@ class BookAPI(APIView):
 
 class CategoryAPI(APIView):
 
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     def get(self, request):
         student_obj = Category.objects.all()
